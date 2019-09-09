@@ -1,0 +1,29 @@
+{
+  "name": "teaserver",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "nodemon --exec babel-node app.js",
+    "debug": "DEBUG=teaServ:* nodemon --exec babel-node app.js"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "md5": "^2.2.1",
+    "nodemon": "^1.19.1",
+    "qrcode": "^1.4.1",
+    "unique-string": "^2.0.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "pug": "2.0.0-beta11"
+  },
+  "devDependencies": {
+    "express-validator": "^6.2.0",
+    "qrcode": "^1.4.1"
+  }
+}
