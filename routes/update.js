@@ -4,6 +4,7 @@ import {
   check, validationResult
 }
 from 'express-validator'
+import fs from 'fs'
 
 let trace = debug('teaServ:update');
 let router = express.Router();
@@ -34,6 +35,7 @@ router.get('/', [
   }
 
   let version = 2
+  let filesize = fs.statSync('./public/update/test.bin').size;
   trace('version compare', parseInt(req.query.version) < version)
   if (parseInt(req.query.version) < version) {
     return res.status(200).json({
@@ -41,7 +43,7 @@ router.get('/', [
       msg: "请求成功",
       version: `${version}`,
       check: 26,
-      size: 25600
+      size: `${filesize}`
     })
   }
 
