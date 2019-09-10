@@ -49,7 +49,7 @@ router.get('/', [
   let version = 2
   let fd, data, bytesRead, base64String = ''
   try {
-    fd = fs.openSync('./public/update/test.bin', 'r')
+    fd = fs.openSync('./update/test.bin', 'r')
     data = Buffer.alloc(1024)
     trace(data, req.query.offset)
     bytesRead = fs.readSync(fd, data, 0, data.length, parseInt(req.query.offset));

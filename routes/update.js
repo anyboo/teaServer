@@ -35,7 +35,7 @@ router.get('/', [
   }
 
   let version = 2
-  let filesize = fs.statSync('./public/update/test.bin').size;
+  let filesize = fs.statSync('./update/test.bin').size;
   trace('version compare', parseInt(req.query.version) < version)
   if (parseInt(req.query.version) < version) {
     return res.status(200).json({
