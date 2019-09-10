@@ -60,6 +60,14 @@ router.get('/', [
     trace('fd : %d, buffer :%s, offset : %d, length : %d, bytesRead:%d', fd,
       base64String, req.query.offset, base64String.length, bytesRead)
 
+    return res.json({
+      code: 1,
+      msg: "请求成功",
+      versoin: version,
+      check: 'BBC校验值',
+      size: bytesRead,
+      data: `${base64String}`
+    })
   } catch (err) {
     trace('open file exception', err)
   } finally {
@@ -67,14 +75,11 @@ router.get('/', [
       fs.closeSync(fd);
   }
 
-  res.json({
-    code: 1,
-    msg: "请求成功",
-    versoin: version,
-    check: 'BBC校验值',
-    size: bytesRead,
-    data: `${base64String}`
+  return res.status(200).json({
+    code: 0,
+    msg: "请求成功,无升级"
   })
+
 });
 
 module.exports = router;

@@ -35,16 +35,20 @@ router.get('/', [
   }
 
   let version = 2
-  let filesize = fs.statSync('./update/test.bin').size;
-  trace('version compare', parseInt(req.query.version) < version)
-  if (parseInt(req.query.version) < version) {
-    return res.status(200).json({
-      code: 1,
-      msg: "请求成功",
-      version: version,
-      check: 26,
-      size: filesize
-    })
+  try {
+    let filesize = fs.statSync('./update/test.bin').size;
+    trace('version compare', parseInt(req.query.version) < version)
+    if (parseInt(req.query.version) < version) {
+      return res.status(200).json({
+        code: 1,
+        msg: "请求成功",
+        version: version,
+        check: 26,
+        size: filesize
+      })
+    }
+  } catch (err) {
+    trace(err)
   }
 
   return res.status(200).json({
