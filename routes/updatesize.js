@@ -33,8 +33,7 @@ router.get('/', [
   check('offset').exists({
     checkFalsy: true
   }).isInt({
-    min: 0,
-    max: 1024
+    min: 0
   }).withMessage('取值区间[32,1024]')
 ], (req, res, next) => {
   trace('%s request -> %s', req.baseUrl, JSON.stringify(req.query));
@@ -48,18 +47,18 @@ router.get('/', [
 
 
   let version = 2
-  let fd, data, bytesRead, base64String
+  let fd, data, bytesRead, base64String = ''
   try {
     fd = fs.openSync('./public/update/test.bin', 'r')
-    data = Buffer.alloc(1024, 'base64')
-    bytesRead = fs.readSync(fd, data, req.query.offset, data.length,
-      null);
-    //base64String = base64.encode(data);
-    base64String = [...txb.hexDump({}, data)]
-      //base64String = 'data:' + mimeType.lookup('./public/update/test.bin') +
-      //  ';base64' + data
-    trace('fd : %d, buffer :%s, offset : %d, length : %d', fd, base64String,
-      req.query.offset, base64String.length)
+    data = Buffer.alloc(1024)
+    trace(data, req.query.offset)
+    bytesRead = fs.readSync(fd, data, 0, data.length, parseInt(req.query.offset));
+    if (bytesRead > 0) {
+      base64String = txb.base64Encode(data)
+    }
+
+    trace('fd : %d, buffer :%s, offset : %d, length : %d, bytesRead:%d', fd,
+      base64String, req.query.offset, base64String.length, bytesRead)
 
   } catch (err) {
     trace('open file exception', err)
