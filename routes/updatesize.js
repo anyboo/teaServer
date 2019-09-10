@@ -70,9 +70,9 @@ router.get('/', [
   res.json({
     code: 1,
     msg: "请求成功",
-    versoin: `${version}`,
+    versoin: version,
     check: 'BBC校验值',
-    size: `${bytesRead}`,
+    size: bytesRead,
     data: `${base64String}`
   })
 });

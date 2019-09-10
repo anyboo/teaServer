@@ -41,9 +41,9 @@ router.get('/', [
     return res.status(200).json({
       code: 1,
       msg: "请求成功",
-      version: `${version}`,
+      version: version,
       check: 26,
-      size: `${filesize}`
+      size: filesize
     })
   }
 

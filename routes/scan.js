@@ -31,11 +31,11 @@ router.get('/', [
   }
 
   if (req.query.qrcode == 'right_qrcode') {
-    let _voice = `欢迎${req.query.qrcode}光临茶室`;
+
     return res.status(200).json({
       code: 1,
       msg: "请求成功",
-      voice: _voice,
+      voice: `欢迎${req.query.qrcode}光临茶室`,
       door: 1,
       air: 1,
       socket: 1,
