@@ -33,7 +33,7 @@ router.post('/', [
       code: 1,
       msg: "请求成功",
       voice: _voice,
-      door: 1,
+      door: 0,
       air: 1,
       socket: 1,
       lamp: 1
