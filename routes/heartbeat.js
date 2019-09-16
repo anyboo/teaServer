@@ -33,10 +33,10 @@ router.post('/', [
       code: 1,
       msg: "请求成功",
       voice: _voice,
-      door: 0,
-      air: 0,
-      socket: 0,
-      lamp: 0
+      door: 1,
+      air: 1,
+      socket: 1,
+      lamp: 1
     });
   }
 
