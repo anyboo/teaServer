@@ -34,11 +34,19 @@ router.get('/', [
     })
   }
 
+  if ('66cff3637394e3457174256' != req.query.cpuid) {
+    return res.status(200).json({
+      code: 0,
+      msg: "请求成功,无升级"
+    })
+  }
+
   let version = 2
   try {
-    let filesize = fs.statSync('./update/test.bin').size;
+    let filesize = fs.statSync('./update/shareTeaV2.bin').size;
     trace('version compare', parseInt(req.query.version) < version)
     if (parseInt(req.query.version) < version) {
+
       return res.status(200).json({
         code: 1,
         msg: "请求成功",
@@ -50,11 +58,6 @@ router.get('/', [
   } catch (err) {
     trace(err)
   }
-
-  return res.status(200).json({
-    code: 0,
-    msg: "请求成功,无升级"
-  })
 
 });
 

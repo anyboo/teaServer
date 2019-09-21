@@ -22,34 +22,12 @@ router.post('/', (req, res, next) => {
   res.send('Please use post method')
   res.end()
 });
-/* GET home page. */
-router.get('/', [
-  check('version').exists({
-    checkFalsy: true
-  }).isInt({
-    min: 1,
-    max: 5
-  }).withMessage('1 < version < 5'),
-  check('offset').exists({
-    checkFalsy: true
-  }).isInt({
-    min: 0
-  }).withMessage('取值区间[32,1024]')
-], (req, res, next) => {
-  trace('%s request -> %s', req.baseUrl, JSON.stringify(req.query));
 
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({
-      errors: errors.array()
-    })
-  }
-
-
+function do_update_size(req, res, next) {
   let version = 2
   let fd, data, bytesRead, base64String = ''
   try {
-    fd = fs.openSync('./update/test.bin', 'r')
+    fd = fs.openSync('./update/shareTeaV2.bin', 'r')
     data = Buffer.alloc(1024)
     trace(data, req.query.offset)
     bytesRead = fs.readSync(fd, data, 0, data.length, parseInt(req.query.offset));
@@ -74,12 +52,37 @@ router.get('/', [
     if (fd !== undefined)
       fs.closeSync(fd);
   }
+}
+/* GET home page. */
+router.get('/', [
+  check('version').exists({
+    checkFalsy: true
+  }).isInt({
+    min: 1,
+    max: 5
+  }).withMessage('1 < version < 5'),
+  check('offset').exists({
+    checkFalsy: true
+  }).isInt({
+    min: 0
+  }).withMessage('取值区间[32,1024]')
+], (req, res, next) => {
+  trace('%s request -> %s', req.baseUrl, JSON.stringify(req.query));
 
-  return res.status(200).json({
-    code: 0,
-    msg: "请求成功,无升级"
-  })
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      errors: errors.array()
+    })
+  }
 
+  if ('66cff3637394e3457174256' != req.query.cpuid) {
+    return res.status(200).json({
+      code: 0,
+      msg: "请求成功,无升级"
+    })
+  }
+  do_update_size(req, res, next);
 });
 
 module.exports = router;
