@@ -76,13 +76,8 @@ router.get('/', [
     })
   }
 
-  if ('66cff3637394e3457174256' != req.query.cpuid) {
-    return res.status(200).json({
-      code: 0,
-      msg: "请求成功,无升级"
-    })
-  }
-  do_update_size(req, res, next);
+  return do_update_size(req, res, next);
+
 });
 
 module.exports = router;

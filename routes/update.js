@@ -55,6 +55,12 @@ router.get('/', [
         size: filesize
       })
     }
+
+    return res.status(200).json({
+      code: 0,
+      msg: "请求成功,无升级"
+    })
+
   } catch (err) {
     trace(err)
   }
