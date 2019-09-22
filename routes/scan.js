@@ -43,6 +43,18 @@ router.get('/', [
     });
   }
 
+  if (req.query.qrcode == 'wrong_qrcode') {
+    return res.status(200).json({
+      code: 1,
+      msg: "请求成功",
+      voice: `谢谢惠顾`,
+      door: 2,
+      air: 1,
+      socket: 2,
+      lamp: 2
+    });
+  }
+
   return res.status(200).json({
     code: 0,
     msg: "请求失败"
