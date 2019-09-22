@@ -48,8 +48,8 @@ router.get('/', [
       code: 1,
       msg: "请求成功",
       voice: `谢谢惠顾`,
-      door: 2,
-      air: 1,
+      door: 0,
+      air: 0,
       socket: 2,
       lamp: 2
     });
