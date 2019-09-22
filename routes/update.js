@@ -34,13 +34,6 @@ router.get('/', [
     })
   }
 
-  if ('668ff3637394e3457153238' != req.query.cpuid) {
-    return res.status(200).json({
-      code: 0,
-      msg: "请求成功,无升级"
-    })
-  }
-
   let version = 2
   try {
     let filesize = fs.statSync('./update/shareTeaV2.bin').size;
