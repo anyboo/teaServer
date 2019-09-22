@@ -34,7 +34,7 @@ router.get('/', [
     })
   }
 
-  if ('66cff3637394e3457174256' != req.query.cpuid) {
+  if ('668ff3637394e3457153238' != req.query.cpuid) {
     return res.status(200).json({
       code: 0,
       msg: "请求成功,无升级"
