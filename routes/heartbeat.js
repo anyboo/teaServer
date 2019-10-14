@@ -34,9 +34,9 @@ router.post('/', [
       msg: "请求成功",
       voice: _voice,
       door: 0,
-      air: 1,
-      socket: 1,
-      lamp: 1
+      air: 0,
+      socket: 0,
+      lamp: 0
     });
   }
 

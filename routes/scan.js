@@ -49,7 +49,7 @@ router.get('/', [
       msg: "请求成功",
       voice: `谢谢惠顾`,
       door: 0,
-      air: 0,
+      air: 2,
       socket: 2,
       lamp: 2
     });
