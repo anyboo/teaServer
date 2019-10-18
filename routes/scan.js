@@ -30,6 +30,19 @@ router.get('/', [
     })
   }
 
+  if (req.query.qrcode == 'today_qrcode_20191018') {
+
+    return res.status(200).json({
+      code: 1,
+      msg: "请求成功",
+      voice: `欢迎${req.query.qrcode}光临茶室`,
+      door: 1,
+      air: 1,
+      socket: 1,
+      lamp: 1
+    });
+  }
+
   if (req.query.qrcode == 'right_qrcode') {
 
     return res.status(200).json({
