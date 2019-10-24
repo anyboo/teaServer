@@ -30,7 +30,7 @@ router.get('/', [
     })
   }
 
-  if (req.query.qrcode == 'right_qrcode') {
+  if (req.query.qrcode == 'right_qrcode_fixed_20191024120000') {
 
     return res.status(200).json({
       code: 1,

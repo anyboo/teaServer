@@ -12,6 +12,14 @@ import heartbeatRouter from './routes/heartbeat'
 import updateRouter from './routes/update'
 import updatesizeRouter from './routes/updatesize'
 
+import bookroom from './routes/bookroom'
+import checkout from './routes/checkout'
+import register from './routes/register'
+import schedule from './routes/schedule'
+import ticket from './routes/ticket'
+import paydone from './routes/paydone'
+
+
 let trace = debug('teaServ:app')
 let app = express();
 
@@ -36,7 +44,12 @@ app.use('/users', usersRouter);
 app.use('/scan', scanRouter);
 app.use('/heartbeat', heartbeatRouter);
 app.use('/update', updateRouter);
-app.use('/updatesize', updatesizeRouter);
+app.use('/bookroom', bookroom);
+app.use('/checkout', checkout);
+app.use('/register', register);
+app.use('/schedule', schedule);
+app.use('/ticket', ticket);
+app.use('/paydone', paydone);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

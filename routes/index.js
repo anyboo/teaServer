@@ -19,7 +19,8 @@ async function qrcode2file(path, text, color) {
   });
 }
 
-qrcode2file('./public/images/qrcode_right.png', 'right_qrcode', '#0FF2');
+qrcode2file('./public/images/qrcode_right_new.png',
+  'right_qrcode_fixed_20191024120000', '#fff');
 qrcode2file('./public/images/qrcode_wrong.png', 'wrong_qrcode', '#FF02');
 qrcode2file('./public/images/qrcode_today.png', 'today_qrcode_20191018', '#fff');
 /* GET home page. */
