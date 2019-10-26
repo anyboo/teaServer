@@ -19,6 +19,28 @@ async function qrcode2file(path, text, color) {
   });
 }
 
+function product_qrcode_3hour_expires() {
+  /// 需要增加过滤条件
+  var qrcode_temparoy = [
+    'c4ca4238a0b923820dcc509a6f75849b',
+    'c81e728d9d4c2f636f067f89cc14862c',
+    'eccbc87e4b5ce2fe28308fd9f2a7baf3',
+    'a87ff679a2f3e71d9181a67b7542122c',
+    'e4da3b7fbbce2345d7772b0674a318d5',
+    '1679091c5a880faf6fb5e6087eb1b2dc',
+    '8f14e45fceea167a5a36dedd4bea2543',
+    'c9f0f895fb98ab9159f51fd0297e236d',
+    '45c48cce2e2d7fbdea1afc51c7c6ad26',
+    'd3d9446802a44259755d38e6d163e820'
+  ]
+
+  for (var i in qrcode_temparoy) {
+    trace(i, qrcode_temparoy[i])
+    let image = './public/images/qrcodes/';
+    image = image.concat('qrcode_3hours_00', i, '.png')
+    qrcode2file(image, qrcode_temparoy[i], '#fff')
+  }
+}
 qrcode2file('./public/images/qrcode_right_new.png',
   'right_qrcode_fixed_20191024120000', '#fff');
 qrcode2file('./public/images/qrcode_wrong.png', 'wrong_qrcode', '#FF02');

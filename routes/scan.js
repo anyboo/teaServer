@@ -3,13 +3,15 @@ import {
   check, validationResult
 }
 from 'express-validator'
-import sqlite3 from 'sqlite3'
+import sqlite from 'sqlite'
 import debug from 'debug'
+import Promise from 'bluebird'
+import chinaTime from 'china-time'
 
-let trace = debug('teaServ:scan');
-let router = express.Router();
-let db = new sqlite3.Database('./db/teaServer.db', (e) => {
-  if (e) trace('sqlite3 %o', e)
+const trace = debug('teaServ:scan');
+const router = express.Router();
+const dbPromise = sqlite.open('./db/teaServer.db', {
+  Promise
 })
 
 router.post('/', (req, res, next) => {
@@ -34,19 +36,6 @@ router.get('/', [
     })
   }
 
-  for (var i in qrcode_temparoy) {
-    if (req.query.qrcode == qrcode_temparoy[i]) {
-      return res.status(200).json({
-        code: 1,
-        msg: "请求成功",
-        voice: `欢迎光临茶室`,
-        door: 1,
-        air: 1,
-        socket: 1,
-        lamp: 1
-      });
-    }
-  }
   if (req.query.qrcode == 'right_qrcode_fixed_20191024120000') {
 
     return res.status(200).json({
@@ -59,19 +48,29 @@ router.get('/', [
       lamp: 1
     });
   }
+  const check = check_qrcode_vailed(req.query.qrcode);
+  check.then(ok => {
+    if (ok) {
+      trace('ok')
+      return res.status(200).json({
+        code: 1,
+        msg: "请求成功",
+        voice: `欢迎光临茶室`,
+        door: 1,
+        air: 1,
+        socket: 1,
+        lamp: 1
+      });
+    }
+  })
 
-  // if (check_qrcode_vailed(req.query.qrcode)) {
-  //   trace('check_qrcode_vailed')
-  //   return res.status(200).json({
-  //     code: 1,
-  //     msg: "请求成功",
-  //     voice: `欢迎光临茶室`,
-  //     door: 1,
-  //     air: 1,
-  //     socket: 1,
-  //     lamp: 1
-  //   });
-  // }
+  check.then(ok => {
+    if (!ok)
+      return res.status(200).json({
+        code: 0,
+        msg: "请求失败"
+      })
+  })
 
   if (req.query.qrcode == 'wrong_qrcode') {
     return res.status(200).json({
@@ -85,34 +84,42 @@ router.get('/', [
     });
   }
 
-  return res.status(200).json({
-    code: 0,
-    msg: "请求失败"
-  })
-
 });
 
-function check_qrcode_vailed(code) {
+async function check_qrcode_vailed(code) {
+  try {
+    const db = await dbPromise;
+    const result = await Promise.all([
+      db.get('SELECT * FROM qrcode WHERE code = ? AND vaild = 1',
+        code)
+    ]).then(result => {
+      trace('qrcode', result)
+      let qrcode = result[0]
+      if (qrcode == undefined)
+        throw 'is invailed!';
 
-  db.get(
-    `SELECT * FROM qrcode WHERE code = ?`, code, (err, qrcode) => {
-      if (err) trace('SELECT * FROM qrcode WHERE code=%s, err: %o', code,
-        err);
-      trace(qrcode)
-      if (qrcode.vaild == 1) {
-        trace('here')
+      const ctime = chinaTime('YYYY-MM-DD HH:mm:ss')
+      trace('ctime:', ctime)
+      trace('qrtime:', qrcode.last_time)
+      let d1 = Date.parse(ctime)
+      let d2 = Date.parse(qrcode.last_time)
+      trace('t1 :', d1)
+      trace('t2 :', d2)
+      if (d1 >= d2)
+        throw 'Game Over'
+
+      if (qrcode.last_time == null) {
         db.run(
           `UPDATE qrcode SET first_time = datetime('now','localtime'), last_time = datetime('now','+3 hours','localtime') WHERE id = ?`,
-          qrcode.id, (err) => {
-            if (err)
-              trace('UPDATE qrcode SET time WHERE id=%d, err: %o',
-                qrcode.id, err);
-          });
-        return true;
+          qrcode.id);
       }
-    }
-  );
-  return false;
+    });
+    return true;
+  } catch (err) {
+    trace('check_qrcode_vailed', err);
+    return false
+  }
+  //trace('check', check)
 }
 
 module.exports = router;

@@ -12,7 +12,8 @@ CREATE TABLE ticket (id INTEGER PRIMARY KEY, name TEXT, count INTEGER, price INT
 CREATE TABLE schedule (id INTEGER PRIMARY KEY, room_id INTEGER, startTime DATETIME, endTime DATETIME, time_index TEXT,
   duration INTEGER, create_time DATETIME, modify_time DATETIME);
 
-CREATE TABLE qrcode (id INTEGER PRIMARY KEY, code TEXT, out_trade_no TEXT, create_time DATETIME, modify_time DATETIME);
+CREATE TABLE qrcode (id INTEGER PRIMARY KEY, code TEXT, out_trade_no TEXT, create_time DATETIME, modify_time DATETIME, vaild Boolean,
+   first_time datetime, last_time datetime, permanent boolean)；
 -- code = out_trade_no
 CREATE TABLE order_list (id INTEGER PRIMARY KEY, out_trade_no TEXT,user_id INTEGER, room_id INTEGER, price INTEGER, startTime DATETIME, endTime DATETIME,
   prepay_id TEXT, ticket_id INTEGER, pay_status INTEGER(3), create_time DATETIME, modify_time DATETIME);
