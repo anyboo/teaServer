@@ -18,6 +18,7 @@ import register from './routes/register'
 import schedule from './routes/schedule'
 import ticket from './routes/ticket'
 import paydone from './routes/paydone'
+import login from './routes/login'
 
 
 let trace = debug('teaServ:app')
@@ -50,6 +51,7 @@ app.use('/register', register);
 app.use('/schedule', schedule);
 app.use('/ticket', ticket);
 app.use('/paydone', paydone);
+app.use('/login', login);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
