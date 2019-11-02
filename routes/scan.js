@@ -36,18 +36,6 @@ router.get('/', [
     })
   }
 
-  if (req.query.qrcode == 'right_qrcode_fixed_20191024120000') {
-
-    return res.status(200).json({
-      code: 1,
-      msg: "请求成功",
-      voice: `欢迎${req.query.qrcode}光临茶室`,
-      door: 1,
-      air: 1,
-      socket: 1,
-      lamp: 1
-    });
-  }
   const check = check_qrcode_vailed(req.query.qrcode);
   check.then(ok => {
     if (ok) {
