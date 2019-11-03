@@ -2,6 +2,7 @@ import express from 'express'
 import createError from 'http-errors'
 import path from 'path'
 import cookieParser from 'cookie-parser'
+import xmlparser from 'express-xml-bodyparser'
 import logger from 'morgan'
 import debug from 'debug'
 import indexRouter from './routes/index'
@@ -19,6 +20,7 @@ import schedule from './routes/schedule'
 import ticket from './routes/ticket'
 import paydone from './routes/paydone'
 import login from './routes/login'
+import room from './routes/room'
 
 
 let trace = debug('teaServ:app')
@@ -37,6 +39,9 @@ app.use(express.json());
 app.use(express.urlencoded({
   extended: false
 }));
+app.use(xmlparser({
+  explicitArray: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -52,6 +57,7 @@ app.use('/schedule', schedule);
 app.use('/ticket', ticket);
 app.use('/paydone', paydone);
 app.use('/login', login);
+app.use('/room', room);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

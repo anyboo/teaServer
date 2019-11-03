@@ -19,10 +19,11 @@ async function qrcode2file(path, text, color) {
   });
 }
 
-function product_qrcode_3hour_expires() {
+function product_qrcode_expires() {
   /// 需要增加过滤条件
   var qrcode_temparoy = [
-    '098f6bcd4621d373cade4e832627b4f6' //MD5 ("test") = 098f6bcd4621d373cade4e832627b4f6
+    'cec315e3d0975e5cc2811d5d8725f149', //MD5 ("fixed") = cec315e3d0975e5cc2811d5d8725f149
+    //'098f6bcd4621d373cade4e832627b4f6', //MD5 ("test") = 098f6bcd4621d373cade4e832627b4f6
     // 'c4ca4238a0b923820dcc509a6f75849b',
     // 'c81e728d9d4c2f636f067f89cc14862c',
     // 'eccbc87e4b5ce2fe28308fd9f2a7baf3',
@@ -38,7 +39,7 @@ function product_qrcode_3hour_expires() {
   for (var i in qrcode_temparoy) {
     trace(i, qrcode_temparoy[i])
     let image = '/Users/yukan/Downloads/qrcodeTest/';
-    image = image.concat('qrcode_3hours_00', i, '.png')
+    image = image.concat('qrcode_fixed_00', i, '.png')
     qrcode2file(image, qrcode_temparoy[i], '#fff')
   }
 }
@@ -47,7 +48,7 @@ function product_qrcode_3hour_expires() {
 //qrcode2file('./public/images/qrcode_today.png', 'today_qrcode_20191018', '#fff');
 /* GET home page. */
 router.get('/', (req, res, next) => {
-  product_qrcode_3hour_expires();
+  product_qrcode_expires();
   res.render('index', {
     title: '测试用二维码',
     right: '/images/qrcode_right.png',
