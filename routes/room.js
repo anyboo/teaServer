@@ -62,10 +62,20 @@ router.post('/getinfo', [
 
   const vaild = vaild_token(req.query.token);
   vaild.then((ok) => {
+    if (!ok) return res.status(200).json({
+      code: 9998,
+      msg: 'token failed!',
+      data: {}
+    })
     if (ok) {
       const getinfo = room_getinfo();
       getinfo.then((roomlist) => {
         trace('getinfo', roomlist)
+        return res.status(200).json({
+          code: 0,
+          msg: 'success',
+          data: roomlist
+        })
       })
     }
   })
