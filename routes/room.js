@@ -3,6 +3,7 @@ import {
   check, validationResult
 }
 from 'express-validator'
+import querystring from 'querystring'
 import debug from 'debug'
 import Utility from './Utility'
 let trace = debug('teaServ:room');
@@ -29,7 +30,7 @@ router.post('/auth', [
     })
   }
 
-  const create = create_token(req.query.appid);
+  const create = create_token(req.body.appid);
   create.then((token) => {
     trace('auth result 1', token)
     if (token) return res.status(200).json({
@@ -60,7 +61,7 @@ router.post('/getinfo', [
     })
   }
 
-  const vaild = vaild_token(req.query.token);
+  const vaild = vaild_token(req.body.token);
   vaild.then((ok) => {
     if (!ok) return res.status(200).json({
       code: 9998,
@@ -97,7 +98,7 @@ router.post('/getstatus', [
     })
   }
 
-  const vaild = vaild_token(req.query.token);
+  const vaild = vaild_token(req.body.token);
   vaild.then((ok) => {
     if (!ok) return res.status(200).json({
       code: 9998,
@@ -105,7 +106,7 @@ router.post('/getstatus', [
       data: {}
     })
     if (ok) {
-      const getstatus = room_getstatus(req.query.uuid)
+      const getstatus = room_getstatus(req.body.uuid)
       getstatus.then((room) => {
         if (typeof room == 'object' && 'cpuid' in room) {
           return res.status(200).json({
@@ -169,14 +170,15 @@ router.post('/changestatus', [
     })
   }
 
+  trace('querystring', req.body.token)
   var device_status = {
-    door: req.query.door,
-    lamp: req.query.lamp,
-    socket: req.query.socket,
-    air: req.query.air
+    door: req.body.door,
+    lamp: req.body.lamp,
+    socket: req.body.socket,
+    air: req.body.air
   }
 
-  const vaild = vaild_token(req.query.token);
+  const vaild = vaild_token(req.body.token);
   vaild.then((ok) => {
     if (!ok) return res.status(200).json({
       code: 9998,
@@ -184,7 +186,7 @@ router.post('/changestatus', [
       data: {}
     });
     if (ok) {
-      const change = room_changestatus(req.query.uuid, device_status);
+      const change = room_changestatus(req.body.uuid, device_status);
       change.then((done) => {
         if (done) return res.status(200).json({
           code: 0,
@@ -231,6 +233,7 @@ async function create_token(appid) {
 }
 
 async function vaild_token(token) {
+  trace('vaild_token', token)
   const db = await dbPromise;
   const [accesstoken] = await Promise.all([
     db.get(

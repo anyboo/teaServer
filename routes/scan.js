@@ -40,15 +40,27 @@ router.get('/', [
   check.then(ok => {
     if (ok) {
       trace('ok')
-      return res.status(200).json({
-        code: 1,
-        msg: "请求成功",
-        voice: `欢迎光临茶室`,
+      const changes = room_changestatus(req.query.cpuid, {
         door: 1,
         air: 1,
         socket: 1,
         lamp: 1
-      });
+      })
+      changes.then((ok) => {
+        if (!ok) return res.status(200).json({
+          code: 0,
+          msg: "请求失败"
+        });
+        if (ok) return res.status(200).json({
+          code: 1,
+          msg: "请求成功",
+          voice: `欢迎光临茶室`,
+          door: 1,
+          air: 1,
+          socket: 1,
+          lamp: 1
+        });
+      })
     }
   })
 
@@ -108,6 +120,30 @@ async function check_qrcode_vailed(code) {
     return false
   }
   //trace('check', check)
+}
+
+async function room_changestatus(uuid, device_status) {
+  trace('room_changestatus', uuid, device_status)
+  try {
+    const db = await dbPromise;
+    const [room] = await Promise.all([
+      db.run(
+        `UPDATE room SET door = ?,lamp = ?,socket = ?,air =? WHERE cpuid = ?`,
+        device_status.door, device_status.lamp, device_status.socket,
+        device_status.air, uuid
+      )
+    ]);
+
+    trace('room_changestatus select:', typeof room, room);
+
+    if (typeof room == 'object' && room.changes == 1) {
+      return 1;
+    }
+
+    return 0;
+  } catch (err) {
+    trace('room_changestatus', err)
+  }
 }
 
 module.exports = router;
