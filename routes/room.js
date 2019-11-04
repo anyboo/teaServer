@@ -138,15 +138,27 @@ router.post('/changestatus', [
   }),
   check('door').exists({
     checkFalsy: true
+  }).isInt({
+    min: 0,
+    max: 2
   }),
   check('lamp').exists({
     checkFalsy: true
+  }).isInt({
+    min: 0,
+    max: 2
   }),
   check('socket').exists({
     checkFalsy: true
+  }).isInt({
+    min: 0,
+    max: 2
   }),
   check('air').exists({
     checkFalsy: true
+  }).isInt({
+    min: 0,
+    max: 2
   })
 ], (req, res, next) => {
 
