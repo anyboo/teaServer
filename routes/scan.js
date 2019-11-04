@@ -38,15 +38,15 @@ router.get('/', [
 
   const check = check_qrcode_vailed(req.query.qrcode);
   check.then(ok => {
-    if (ok) return res.status(200).json({
-      code: 1,
-      msg: "请求成功",
-      voice: `欢迎光临茶室`,
-      door: 1,
-      air: 1,
-      socket: 1,
-      lamp: 1
-    });
+    // if (ok) return res.status(200).json({
+    //   code: 1,
+    //   msg: "请求成功",
+    //   voice: `欢迎光临茶室`,
+    //   door: 1,
+    //   air: 1,
+    //   socket: 1,
+    //   lamp: 1
+    // });
     if (ok) {
       trace('ok')
       const changes = room_changestatus(req.query.cpuid, {
@@ -56,19 +56,19 @@ router.get('/', [
         lamp: 1
       })
       changes.then((ok) => {
-        // if (!ok) return res.status(200).json({
-        //   code: 0,
-        //   msg: "请求失败"
-        // });
-        // if (ok) return res.status(200).json({
-        //   code: 1,
-        //   msg: "请求成功",
-        //   voice: `欢迎光临茶室`,
-        //   door: 1,
-        //   air: 1,
-        //   socket: 1,
-        //   lamp: 1
-        // });
+        if (!ok) return res.status(200).json({
+          code: 0,
+          msg: "请求失败"
+        });
+        if (ok) return res.status(200).json({
+          code: 1,
+          msg: "请求成功",
+          voice: `欢迎光临茶室`,
+          door: 1,
+          air: 1,
+          socket: 1,
+          lamp: 1
+        });
       })
     }
   })
