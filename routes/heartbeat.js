@@ -34,7 +34,7 @@ router.post('/', [
   status.then((room) => {
     if (typeof room == 'object' && 'cpuid' in room) {
       return res.status(200).json({
-        code: 0,
+        code: 1,
         msg: '请求成功',
         voice: '',
         door: room.door,
