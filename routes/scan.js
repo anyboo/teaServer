@@ -50,7 +50,7 @@ router.get('/', [
     if (ok) {
       trace('ok')
       const changes = room_changestatus(req.query.cpuid, {
-        door: 1,
+        door: 0,
         air: 1,
         socket: 1,
         lamp: 1
