@@ -36,6 +36,31 @@ router.get('/', [
     })
   }
 
+  if (req.query.qrcode == 'wrong_qrcode') {
+    const changes = room_changestatus(req.query.cpuid, {
+      door: 0,
+      air: 2,
+      socket: 2,
+      lamp: 2
+    })
+    changes.then((ok) => {
+      trace('wrong_qrcode', 1)
+      if (!ok) return res.status(200).json({
+        code: 0,
+        msg: "请求失败"
+      });
+      if (ok) return res.status(200).json({
+        code: 1,
+        msg: "请求成功",
+        voice: `谢谢惠顾`,
+        door: 0,
+        air: 2,
+        socket: 2,
+        lamp: 2
+      });
+    })
+  }
+
   const check = check_qrcode_vailed(req.query.qrcode);
   check.then(ok => {
     // if (ok) return res.status(200).json({
@@ -80,19 +105,6 @@ router.get('/', [
         msg: "请求失败"
       })
   })
-
-  if (req.query.qrcode == 'wrong_qrcode') {
-    return res.status(200).json({
-      code: 1,
-      msg: "请求成功",
-      voice: `谢谢惠顾`,
-      door: 0,
-      air: 2,
-      socket: 2,
-      lamp: 2
-    });
-  }
-
 });
 
 async function check_qrcode_vailed(code) {
