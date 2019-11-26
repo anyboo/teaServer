@@ -7,6 +7,8 @@ import sqlite from 'sqlite'
 import debug from 'debug'
 import Promise from 'bluebird'
 import chinaTime from 'china-time'
+import got from 'got'
+import querystring from 'querystring'
 
 const trace = debug('teaServ:scan');
 const router = express.Router();
@@ -61,6 +63,7 @@ router.get('/', [
     })
   }
 
+  const notify = To3rdPartySend(req.query.qrcode);
   const check = check_qrcode_vailed(req.query.qrcode);
   check.then(ok => {
     // if (ok) return res.status(200).json({
@@ -141,6 +144,25 @@ async function check_qrcode_vailed(code) {
     return false
   }
   //trace('check', check)
+}
+
+async function To3rdPartySend(qrcode) {
+  trace('To3rdPartySend', qrcode);
+  try {
+    const query = querystring.stringify({
+      p: [`${qrcode}`]
+    });
+    trace('querystring ->', query);
+    const response = got.post(
+      'http://jiadaoyun.com/api/v1/hardware/receiveData', {
+        query
+      });
+    response.then((res) => {
+      trace(res.body);
+    })
+  } catch (e) {
+    trace(e)
+  }
 }
 
 async function room_changestatus(uuid, device_status) {
