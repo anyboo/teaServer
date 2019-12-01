@@ -63,18 +63,8 @@ router.get('/', [
     })
   }
 
-  const notify = To3rdPartySend(req.query.qrcode);
   const check = check_qrcode_vailed(req.query.qrcode);
   check.then(ok => {
-    // if (ok) return res.status(200).json({
-    //   code: 1,
-    //   msg: "请求成功",
-    //   voice: `欢迎光临茶室`,
-    //   door: 1,
-    //   air: 1,
-    //   socket: 1,
-    //   lamp: 1
-    // });
     if (ok) {
       trace('ok')
       const changes = room_changestatus(req.query.cpuid, {
@@ -98,17 +88,66 @@ router.get('/', [
           lamp: 1
         });
       })
+    } else {
+      const check2 = check_qrcode_vailed_2(req.query.qrcode)
+      check2.then(pass => {
+        if (pass) {
+          trace('pass')
+          const changes = room_changestatus(req.query.cpuid, {
+            door: 0,
+            air: 1,
+            socket: 1,
+            lamp: 1
+          })
+          changes.then((ok) => {
+            if (!ok) return res.status(200).json({
+              code: 0,
+              msg: "请求失败"
+            });
+            if (ok) return res.status(200).json({
+              code: 1,
+              msg: "请求成功",
+              voice: `欢迎光临茶室`,
+              door: 1,
+              air: 1,
+              socket: 1,
+              lamp: 1
+            });
+          })
+        } else {
+          return res.status(200).json({
+            code: 0,
+            msg: "请求失败"
+          })
+        }
+      });
     }
   })
-
-  check.then(ok => {
-    if (!ok)
-      return res.status(200).json({
-        code: 0,
-        msg: "请求失败"
-      })
-  })
 });
+
+async function check_qrcode_vailed_2(code) {
+  try {
+    const query = querystring.stringify({
+      p: [`${code}`]
+    });
+    trace('querystring ->', query);
+    const response = await got.post(
+      'https://www.jiadaoyun.com/tmcs/api/v1/hardware/receiveData', {
+        query
+      }).then((res) => {
+      let pass = JSON.parse(res.body);
+      trace('pass =>', pass);
+      if (pass.code == 500) {
+        trace('pass room change')
+        throw 'pass code is invailed!'
+      }
+    });
+    return true;
+  } catch (e) {
+    trace('check_qrcode_vailed', e);
+    return false
+  }
+}
 
 async function check_qrcode_vailed(code) {
   try {
@@ -154,7 +193,7 @@ async function To3rdPartySend(qrcode) {
     });
     trace('querystring ->', query);
     const response = got.post(
-      'http://jiadaoyun.com/api/v1/hardware/receiveData', {
+      'https://www.jiadaoyun.com/tmcs/api/v1/hardware/receiveData', {
         query
       });
     response.then((res) => {
