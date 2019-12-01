@@ -89,7 +89,7 @@ router.get('/', [
         });
       })
     } else {
-      const check2 = check_qrcode_vailed_2(req.query.qrcode)
+      const check2 = check_qrcode_vailed_2(req.query.qrcode, req.query.cpuid)
       check2.then(pass => {
         if (pass) {
           trace('pass')
@@ -125,10 +125,11 @@ router.get('/', [
   })
 });
 
-async function check_qrcode_vailed_2(code) {
+async function check_qrcode_vailed_2(code, uuid) {
   try {
     const query = querystring.stringify({
-      p: [`${code}`]
+      p: [`${code}`],
+      uuid: [`${uuid}`]
     });
     trace('querystring ->', query);
     const response = await got.post(
